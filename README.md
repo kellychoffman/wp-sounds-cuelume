@@ -1,4 +1,4 @@
-# Cuelume Sounds
+# WP Sounds
 
 Interaction sounds for the WordPress block editor, synthesized live in the browser with Web Audio. No audio files, no dependencies, editor-only.
 
@@ -25,7 +25,7 @@ Clone into your plugins directory and activate:
 
 ```sh
 cd wp-content/plugins
-git clone https://github.com/kellychoffman/cuelume-sounds.git
+git clone https://github.com/kellychoffman/wp-sounds-cuelume.git
 ```
 
 Or grab the zip from GitHub (Code, then Download ZIP) and upload it via Plugins, then Add New Plugin.
@@ -33,13 +33,13 @@ Or grab the zip from GitHub (Code, then Download ZIP) and upload it via Plugins,
 For a quick local spin with [wp-now](https://github.com/WordPress/playground-tools/tree/trunk/packages/wp-now):
 
 ```sh
-cd cuelume-sounds
+cd wp-sounds-cuelume
 npx @wp-now/wp-now start --php 8.2
 ```
 
 ## How it works
 
-- `cuelume-sounds.php` enqueues one script on `enqueue_block_editor_assets`, so nothing loads on the front end.
+- `wp-sounds-cuelume.php` enqueues one script on `enqueue_block_editor_assets`, so nothing loads on the front end.
 - `js/editor-sounds.js` holds the whole thing: the inlined [Cuelume](https://www.npmjs.com/package/cuelume) synth engine (v0.1.2, ESM-only upstream, hence the inline copy), plus the editor wiring.
 - Outcome cues come from `wp.data.subscribe()` watching `core/editor` state transitions (`isSavingPost`, `isPublishingPost`, `didPostSaveRequestSucceed`, publish sidebar, inserter). Toggle and snackbar cues use delegated DOM listeners on the editor chrome.
 

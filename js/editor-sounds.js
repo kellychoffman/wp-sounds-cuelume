@@ -1,5 +1,5 @@
 /**
- * Cuelume Sounds — wires Cuelume interaction sounds to block editor moments.
+ * WP Sounds: wires Cuelume interaction sounds to block editor moments.
  *
  * Sound map (everything else stays silent on purpose):
  *   - Publish panel opens ........ bloom
