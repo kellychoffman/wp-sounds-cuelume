@@ -1,6 +1,6 @@
-# Cuelume Sounds
+## Cuelume Sounds
 
-Interaction sounds for the WordPress. Testing, and very much in progress. A cue plays only when the editor finishes something on your behalf, or reveals something new.
+Interaction sounds for WordPress. Very much in progress. A cue plays only when the editor finishes something on your behalf, or reveals something new. Add it to your site to give a test.
 
 ## Credits and license
 
