@@ -2,14 +2,10 @@
  * WP Sounds: wires Cuelume interaction sounds to block editor moments.
  *
  * Sound map (everything else stays silent on purpose):
- *   - Publish panel opens ........ bloom
+ *   - Pre-publish panel opens .... bloom
  *   - Publishing starts .......... loading
  *   - Publish succeeds ........... success
- *   - Save draft succeeds ........ tick
- *   - Save fails ................. error
- *   - Toggle controls ............ toggle
- *   - Snackbar dismissed ......... droplet (click only; auto-dismiss is silent)
- *   - Block inserter opens ....... bloom
+ *   - Publish fails .............. error
  *
  * The synth engine below is Cuelume 0.1.2 (MIT, Daniel Belyi), inlined because
  * the npm package is ESM-only. https://www.npmjs.com/package/cuelume
@@ -200,11 +196,10 @@
 	 * ================================================================ */
 	const play = cuelume.play;
 
-	// Outcome sounds come from wp.data state transitions, not clicks.
-	let wasSaving = false;
+	// Publish flow only. Cues come from wp.data state transitions, not clicks,
+	// so they mark real outcomes. Draft saves and autosaves stay silent.
 	let wasPublishing = false;
 	let publishPanelOpen = false;
-	let inserterOpen = false;
 
 	wp.data.subscribe( () => {
 		const editor = wp.data.select( "core/editor" );
@@ -216,52 +211,13 @@
 		if ( panelOpen && ! publishPanelOpen ) play( "bloom" );
 		publishPanelOpen = panelOpen;
 
-		// Block inserter opening: also a reveal. The selector moved from
-		// edit-post to editor in WP 6.5, so check both.
-		let insOpen = false;
-		if ( typeof editor.isInserterOpened === "function" ) insOpen = editor.isInserterOpened();
-		else if ( editPost && typeof editPost.isInserterOpened === "function" ) insOpen = editPost.isInserterOpened();
-		if ( insOpen && ! inserterOpen ) play( "bloom" );
-		inserterOpen = insOpen;
-
-		// Saves. Autosaves stay silent; only user-initiated saves get a cue.
-		const saving = editor.isSavingPost() && ! editor.isAutosavingPost();
-		if ( saving && ! wasSaving ) {
-			wasPublishing = editor.isPublishingPost();
-			if ( wasPublishing ) play( "loading" );
-		} else if ( ! saving && wasSaving ) {
-			if ( editor.didPostSaveRequestSucceed() ) {
-				play( wasPublishing ? "success" : "tick" );
-			} else {
-				play( "error" );
-			}
-			wasPublishing = false;
+		// The save that publishes.
+		const publishing = editor.isSavingPost() && ! editor.isAutosavingPost() && editor.isPublishingPost();
+		if ( publishing && ! wasPublishing ) {
+			play( "loading" );
+		} else if ( ! publishing && wasPublishing ) {
+			play( editor.didPostSaveRequestSucceed() ? "success" : "error" );
 		}
-		wasSaving = saving;
+		wasPublishing = publishing;
 	} );
-
-	// Toggle controls anywhere in the editor chrome: a mechanical click-clack.
-	document.addEventListener(
-		"change",
-		( event ) => {
-			const target = event.target;
-			if ( target && target.classList && target.classList.contains( "components-form-toggle__input" ) ) {
-				play( "toggle" );
-			}
-		},
-		true
-	);
-
-	// Snackbar notices dismiss on click; auto-dismiss stays silent. Skip the
-	// action link so navigation does not race a sound.
-	document.addEventListener(
-		"click",
-		( event ) => {
-			const bar = event.target.closest && event.target.closest( ".components-snackbar" );
-			if ( bar && ! event.target.closest( "a, .components-snackbar__action" ) ) {
-				play( "droplet" );
-			}
-		},
-		true
-	);
 } )();

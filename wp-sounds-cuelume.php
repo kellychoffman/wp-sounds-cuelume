@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       WP Sounds
  * Plugin URI:        https://github.com/kellychoffman/wp-sounds-cuelume
- * Description:       Interaction sounds for the block editor: publish, save draft, toggles, and notices. Synthesized live with Web Audio via Cuelume. No audio files.
- * Version:           0.1.0
+ * Description:       Publish sounds for the block editor: cues when the publish flow opens, works, and lands. Synthesized live with Web Audio via Cuelume. No audio files.
+ * Version:           0.2.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            kellychoffman
@@ -21,7 +21,7 @@ function wp_sounds_cuelume_enqueue_editor_assets() {
 		'wp-sounds-cuelume-editor',
 		plugins_url( 'js/editor-sounds.js', __FILE__ ),
 		array( 'wp-data', 'wp-dom-ready' ),
-		'0.1.0',
+		'0.2.0',
 		true
 	);
 }
