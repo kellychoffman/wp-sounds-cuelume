@@ -1,6 +1,10 @@
 ## WP Sounds
 
-Interaction sounds for WordPress. Very much in progress. A cue plays only when the editor finishes something on your behalf, or reveals something new. Add it to your site to give a test.
+Minimal interaction sounds for WordPress. Very much in progress. Add it to your site to give a test. Would love feedback.
+
+Try: 
+- Publishing a post
+- Activating a new theme
 
 ## Credits and license
 
